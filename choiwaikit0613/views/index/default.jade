@@ -1,0 +1,14 @@
+include site_header.jade
+include site_content.jade
+include site_footer.jade
+
+doctype html
+html
+    head
+        script(src='https://code.jquery.com/jquery-3.1.0.min.js')
+        script(src='https://code.jquery.com/ui/1.12.0/jquery-ui.min.js')
+    body
+        +site_header()
+        block content
+        +site_footer()
+        block js

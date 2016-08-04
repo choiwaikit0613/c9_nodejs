@@ -1,0 +1,380 @@
+block content
+    .content-container
+        .buttonList-container
+            button#showDefault(hidden) Click Me to show PokeAdvisor
+            button#showAllList(hidden) Click Me to show All Available List
+            button#showAll(disabled hidden) Click Me to show All player in group
+        .availableList-container
+        .profileList-container
+
+block js
+    script.
+        var group = {};
+        var profileLists = [];
+    script.
+        function getGroupName(){
+            var pathname = window.location.pathname;
+            return pathname.replace("/pokeadvisor/", '');
+        }
+        
+        function getProfileLists(){
+            var url = window.location.protocol+'//'+window.location.hostname+'/api/pokeadvisor/group/'+group.name;
+            // console.log('url: ', url);
+            return $.ajax({
+                type: "GET",
+                dataType: "text",
+                url: url,
+                success: function( data ) {
+                    // console.log('ProfileListsAPI success');
+                    profileLists = JSON.parse(data);
+                }
+            })
+            .done(function( data ) {
+                // console.log('ProfileListsAPI done');
+                renderContent();
+            })
+            .fail(function( data ) {
+                // console.log( "ProfileListsAPI fail" );
+            });
+        }
+        
+        function getProfile(profile){
+            var url = window.location.protocol+'//'+window.location.hostname+'/api/pokeadvisor/id/'+profile.id;
+            // console.log('url: ', url);
+            return $.ajax({
+                type: "GET",
+                url: url,
+                success: function( data ) {
+                    // console.log('PokeAdvisorAPI success');
+                    group[profile.id] = { 'id': profile.id, 'name': profile.name, 'data': JSON.parse(data) };
+                }
+            })
+            .done(function( data ) {
+                // console.log('PokeAdvisorAPI done');
+            })
+            .fail(function( data ) {
+                // console.log( "PokeAdvisorAPI fail" );
+            });
+        }
+        
+        function getTeam(teamId){
+            var team = {};
+            switch(teamId){
+                case 0:
+                default:
+                    team.name = 'No Team';
+                    team.icon = 'team_noteam_img';
+                    break;
+                case 1:
+                    team.name = 'Mystic';
+                    team.icon = 'team_mystic_img';
+                    break;
+                case 2:
+                    team.name = 'Valor';
+                    team.icon = 'team_volar_img';
+                    break;
+                case 3:
+                    team.name = 'Instinct';
+                    team.icon = 'team_instinct_img';
+                    break;
+            }
+            return team;
+        }
+        
+        function getFormattedProfile(profile){
+            // console.log('profile: ', profile);
+            var pokemonTotal = 151;
+            
+            var profile = {
+                'id': profile.id,
+                'name': profile.name,
+                'trainer': {
+                    'id': profile.data.d.n,
+                    'createAt': profile.data.d.c,
+                    'createAtFormatted': moment(profile.data.d.c).format('YYYY/MM/DD'),
+                    'lastUpdated': profile.data.d.lu,
+                    'lastUpdatedFormatted':moment(profile.data.d.lu).toNow(true),
+                    'rankLevel': profile.data.d.rl,
+                    'level': profile.data.d.l,
+                    'xp': profile.data.d.xp,
+                    'teamName': getTeam(profile.data.d.t).name,             // { '0': 'no team', '1': 'mystic', '2': 'valor', '3': 'instinct' }
+                    'teamIcon': getTeam(profile.data.d.t).icon,
+                    'stardust': profile.data.d.d,
+                },
+                'pokemon': {
+                    'pokemonCollected': profile.data.d.pc,
+                    'pokemonTotal': pokemonTotal,
+                    'caught': profile.data.d.cap,
+                    'encountered': profile.data.d.e,
+                    'pokemonballThrown': profile.data.d.pt,
+                    'captureRate': Math.floor( profile.data.d.cap / profile.data.d.e * 100 ),
+                },
+                'gym': {
+                    'cooldown': '',
+                    'battleWon': profile.data.d.bw,
+                    'trainingWin': profile.data.d.tb,
+                    'prestigeEarned': profile.data.d.pr,
+                },
+                'other': {
+                    'eggHatched': profile.data.d.h,
+                    'traveledKm': profile.data.d.km,
+                    'pokestopLooted': profile.data.d.sv,
+                },
+                'unused':{
+                    'co': profile.data.d.co,
+                    'bon': profile.data.d.bon,
+                    'rkm': profile.data.d.rkm,
+                    'rbw': profile.data.d.rbw,
+                    'rh': profile.data.d.rh,
+                    'rsv': profile.data.d.rsv,
+                    'rpc': profile.data.d.rpc,
+                    'rcap': profile.data.d.rcap,
+                    'rpr': profile.data.d.rpr,
+                }
+                
+            }
+            return profile;
+        }
+        
+        function showProfile(profile){
+            var formattedProfile = getFormattedProfile(profile);
+            // console.log( 'formattedProfile: ', formattedProfile );
+            var profileDiv = '';
+            
+            var trainerIdScript = '';
+            var setTrainerIdScript = '';
+            
+            trainerIdScript += "function setTrainerId(id){$('#trainer-search').val(id);alert( '#trainer-search: ', $('#trainer-search').val() );}";
+            setTrainerIdScript += "setTrainerId(id);";
+            
+            var script = '';
+            // script += trainerIdScript;
+            // script += setTrainerIdScript;
+            
+            profileDiv +=
+                "<div class='profile-container' id='"+formattedProfile.id+"' >" +
+                    "<div class='profile_title'>" + 
+                        "<span class='profile_title__name'>"+formattedProfile.name+"</span>" + 
+                        "<span class='profile_title__id'>  &#40; "+formattedProfile.id+" &#41; </span>" + 
+                    "</div>" + 
+                    "<div class='profile_content'>" + 
+                        "<div class='profile_content__trainer'>" + 
+                            "<div class='profile_content__trainer-id'>" + 
+                                "<span>"+formattedProfile.trainer.id+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-createAtFormatted'>" + 
+                                "<span class='label'>Created: </span>" + 
+                                "<span>"+formattedProfile.trainer.createAtFormatted+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-lastUpdatedFormatted'>" + 
+                                "<span class='label'>Updated: </span>" + 
+                                "<span>"+formattedProfile.trainer.lastUpdatedFormatted+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-rankLevel'>" + 
+                                "<span class='label'>Rank: </span>" + 
+                                "<span>"+formattedProfile.trainer.rankLevel+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-level'>" + 
+                                "<span>"+formattedProfile.trainer.level+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-xp'>" + 
+                                "<span>"+formattedProfile.trainer.xp+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-team'>" + 
+                                "<div class='div-bgi-parent teamIcon'>" + 
+                                    "<div class='div-bgi div-bgi-1_1 "+formattedProfile.trainer.teamIcon+"'>"+"</div>" + 
+                                "</div>" + 
+                                "<span>"+formattedProfile.trainer.teamName+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__trainer-stardust'>" + 
+                                "<div class='div-bgi-parent stardustIcon'>" + 
+                                    "<div class='div-bgi div-bgi-1_1 stardust_img'>"+"</div>" + 
+                                "</div>" + 
+                                "<span>"+formattedProfile.trainer.stardust+"</span>" + 
+                            "</div>" + 
+                        "</div>" + 
+                        "<div class='profile_content__pokemon'>" + 
+                            "<div class='profile_content__pokemon-pokemonCollection'>" + 
+                                "<div class='profile_content__pokemon-pokemonCollected'>" + 
+                                    "<span>"+formattedProfile.pokemon.pokemonCollected+"</span>" + 
+                                "</div>" + 
+                                "<div class='profile_content__pokemon-numberSeperator'>" + 
+                                    "<span> / </span>" + 
+                                "</div>" + 
+                                "<div class='profile_content__pokemon-pokemonTotal'>" + 
+                                    "<span>"+formattedProfile.pokemon.pokemonTotal+"</span>" + 
+                                "</div>" + 
+                            "</div>" + 
+                            "<div class='profile_content__pokemon-caught'>" + 
+                                "<span class='label'>Caught: </span>" + 
+                                "<span>"+formattedProfile.pokemon.caught+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__pokemon-encountered'>" + 
+                                "<span class='label'>Encountered: </span>" + 
+                                "<span>"+formattedProfile.pokemon.encountered+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__pokemon-pokemonballThrown'>" + 
+                                "<span class='label'>Pokeball Thrown: </span>" + 
+                                "<span>"+formattedProfile.pokemon.pokemonballThrown+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__pokemon-captureRate'>" + 
+                                "<span class='label'>Capture Rate: </span>" + 
+                                "<span>"+formattedProfile.pokemon.captureRate+"%</span>" + 
+                            "</div>" + 
+                        "</div>" + 
+                        "<div class='profile_content__gym'>" + 
+                            "<div class='profile_content__gym-cooldown'>" + 
+                                "<span>"+formattedProfile.gym.cooldown+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__gym-battleWon'>" + 
+                                "<span class='label'>Battle Won: </span>" + 
+                                "<span>"+formattedProfile.gym.battleWon+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__gym-trainingWin'>" + 
+                                "<span class='label'>Training Wins: </span>" + 
+                                "<span>"+formattedProfile.gym.trainingWin+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__gym-prestigeEarned'>" + 
+                                "<span class='label'>Prestige Earned: </span>" + 
+                                "<span>"+formattedProfile.gym.prestigeEarned+"</span>" + 
+                            "</div>" + 
+                        "</div>" + 
+                        "<div class='profile_content__other'>" + 
+                            "<div class='profile_content__other-eggHatched'>" + 
+                                "<span class='label'>Egg Hatched: </span>" + 
+                                "<span>"+formattedProfile.other.eggHatched+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__other-traveledKm'>" + 
+                                "<span class='label'>Traveled(km): </span>" + 
+                                "<span>"+formattedProfile.other.traveledKm+"</span>" + 
+                            "</div>" + 
+                            "<div class='profile_content__other-pokestopLooted'>" + 
+                                "<span class='label'>Pokestop Looted: </span>" + 
+                                "<span>"+formattedProfile.other.pokestopLooted+"</span>" + 
+                            "</div>" + 
+                        "</div>" + 
+                    "</div>" + 
+                "</div>";
+            return profileDiv;
+        }
+        
+        function extendAllProfileFromProfileList(profileList){
+            var profileListContainer = $('.profileList-container');
+            var profilesDiv = '';
+            var profileListResults = [];
+            
+            $.when.apply($, profileList.map(function(profile, index) {
+                return getProfile(profile).then(function(){
+                    profileListResults[index] = showProfile(group[profile.id]);
+                });
+            }))
+            .then(function() {
+                profileListResults.forEach(function(profileListResult, index){
+                    profilesDiv += profileListResult;
+                });
+            }).done(function(){
+                removeLoading();
+                removeProfileList();
+                profileListContainer.append(profilesDiv);
+            });
+        }
+        
+        function removeLoading(){
+            $('.profileList-container').children().remove();
+        }
+        
+        function removeAvailableList(){
+          $('.availableList-container').children().remove();
+        }
+        
+        function removeProfileList(){
+          $('.profileList-container').children().remove();
+        }
+
+        function appendLoading(){
+            var profileListContainer = $('.profileList-container');
+            var waitingDiv = '';
+            waitingDiv +=
+                "<div>" + 
+                    "<span>Loading...</span>" + 
+                "</div>";
+            
+            profileListContainer.append(waitingDiv);
+        }
+        
+        function appendProfileList(){
+            var profileListContainer = $('.profileList-container');
+            var profile = {
+                id: 'default',
+                name: 'PokeAdvisor'
+            };
+            var pokeadvisorDiv = '';
+            pokeadvisorDiv +=
+                "<div class='profile-container' id='"+profile.id+"' >" +
+                    "<div class='profile_title'>" + 
+                        "<span class='profile_title__name'>"+profile.name+"</span>" + 
+                        "<span class='profile_title__id'>  &#40; "+profile.id+" &#41; </span>" + 
+                    "</div>" + 
+                    "<iframe id='"+profile.id+"-iframe' src='https://pokeadvisor.com'></iframe>" + 
+                "</div>";
+            profileListContainer.append(pokeadvisorDiv);
+        }
+        
+        function showAllAvailableList(){
+            var availableListContainer = $('.availableList-container');
+            var availableListDiv = '';
+            Object.keys(profileLists).forEach(function(profileListName, index){
+                availableListDiv +=
+                    "<a href='"+window.location.protocol+'//'+window.location.hostname+'/pokeadvisor/'+profileListName+"'>" + 
+                        "<div class='profileList profileList-"+index+"' profileListName='"+profileListName+"'>" + 
+                            "<span>"+profileListName+"</span>" + 
+                        "</div>" + 
+                    "</a>";
+            });
+            $.when()
+            .then(function(){
+                removeAvailableList();
+            })
+            .then(function(){
+                availableListContainer.append(availableListDiv);
+            });
+        }
+    script.
+        function initialEnvironment(){
+            group.name = getGroupName();
+            profileLists = getProfileLists();
+        }
+        function renderContent(){
+            $.when()
+            .then(function(){
+                if(group.name && profileLists[group.name]){
+                    $.when()
+                    .then(function(){
+                        $('#showAll').attr('disabled', null);
+                    })
+                    .then(function(){
+                        $('#showAll').trigger('click');
+                    });
+                    // extendAllProfileFromProfileList(profileLists[group.name]);
+                }
+            })
+            .then(function(){
+                $('#showDefault').on('click', function(){
+                    appendProfileList();
+                });
+                
+                $('#showAllList').on('click', function(){
+                    showAllAvailableList();
+                });
+                
+                $('#showAll').on('click', function(){
+                    $('#showAll').attr('disabled', 'disabled');
+                    appendLoading();
+                    extendAllProfileFromProfileList(profileLists[group.name]);
+                });
+            });
+        }
+    script.
+        $(document).ready(function(){
+            initialEnvironment();
+        });

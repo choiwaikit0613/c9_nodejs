@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        script(src='/javascripts/jquery-3.1.0.min.js')
+        script(src='/jquery-ui-1.12.0/jquery-ui.min.js')
+        
+        link(href='/jquery-ui-1.12.0/jquery-ui.min.css', rel="stylesheet")
+        link(href="/stylesheets/pokeadvisor/site_content.less", rel="stylesheet/less", type="text/css" )
+        link(href="/stylesheets/pokeadvisor/backgroundimage.less", rel="stylesheet/less", type="text/css" )
+        script(src='/javascripts/less-2.7.1.min.js')
+        script(src='/javascripts/moment-2.14.1.min.js')
+    body
+        #site-body
+            #site-header
+                include site_header.jade
+                +site_header()
+            
+            #site-content
+                include site_content.jade
+                block content
+            
+            #site-footer
+                include site_footer.jade
+                +site_footer()
+            
+            block js
