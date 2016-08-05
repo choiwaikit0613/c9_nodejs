@@ -143,6 +143,18 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
         },
     ];
     
+    var profileList_cp_listname = 'cp';
+    var profileList_cp_listdata = [
+        {
+            'id': 'choiwaikit0613',
+            'name': 'Kit'
+        },
+        {
+            'id': 'GarkiMalus',
+            'name': 'Alex'
+        }
+    ];
+    
     var group = req.params.group;
     var profileLists = {};
     addProfileList(profileList_family_listname, profileList_family_listdata);
@@ -150,6 +162,7 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
     addProfileList(profileList_bwys_listname, profileList_bwys_listdata);
     addProfileList(profileList_cityucs_listname, profileList_cityucs_listdata);
     addProfileList(profileList_ascnsa_listname, profileList_ascnsa_listdata);
+    addProfileList(profileList_cp_listname, profileList_cp_listdata);
     
     function addProfileList(listName, listData){
         var profileList = listData;
