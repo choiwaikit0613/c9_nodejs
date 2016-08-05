@@ -1,14 +1,27 @@
 doctype html
 html
     head
+        // jquery
         script(src='/javascripts/jquery-3.1.0.min.js')
-        script(src='/jquery-ui-1.12.0/jquery-ui.min.js')
         
-        link(href='/jquery-ui-1.12.0/jquery-ui.min.css', rel="stylesheet")
-        link(href="/stylesheets/pokeadvisor/site_content.less", rel="stylesheet/less", type="text/css" )
-        link(href="/stylesheets/pokeadvisor/backgroundimage.less", rel="stylesheet/less", type="text/css" )
-        script(src='/javascripts/less-2.7.1.min.js')
+        // jquery UI
+        script(src='/jquery-ui-1.12.0/jquery-ui.min.js')
+        link(href='/jquery-ui-1.12.0/jquery-ui.min.css' rel="stylesheet")
+        
+        // moment
         script(src='/javascripts/moment-2.14.1.min.js')
+        
+        // MDL
+        link(href="/node_modules/material-design-lite/material.min.css" rel="stylesheet")
+        script(src="/node_modules/material-design-lite/material.min.js")
+        link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+        
+        // site
+        link(href="/stylesheets/pokeadvisor/site_content.less" rel="stylesheet/less" type="text/css")
+        link(href="/stylesheets/pokeadvisor/backgroundimage.less" rel="stylesheet/less" type="text/css")
+        script(src='/javascripts/less-2.7.1.min.js')
+        
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
     body
         #site-body
             #site-header
@@ -16,8 +29,9 @@ html
                 +site_header()
             
             #site-content
-                include site_content.jade
-                block content
+                main
+                    include site_content.jade
+                    block content
             
             #site-footer
                 include site_footer.jade

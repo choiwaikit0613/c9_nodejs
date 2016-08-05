@@ -156,41 +156,44 @@ block js
                     "<div class='profile_title'>" + 
                         "<span class='profile_title__name'>"+formattedProfile.name+"</span>" + 
                         "<span class='profile_title__id'>  &#40; "+formattedProfile.id+" &#41; </span>" + 
+                        "<div class='profile_content__trainer-rankLevel'>" + 
+                            "<span class='label'>Rank: </span>" + 
+                            "<span>"+formattedProfile.trainer.rankLevel+"</span>" + 
+                        "</div>" + 
                     "</div>" + 
                     "<div class='profile_content'>" + 
                         "<div class='profile_content__trainer'>" + 
-                            "<div class='profile_content__trainer-id'>" + 
-                                "<span>"+formattedProfile.trainer.id+"</span>" + 
-                            "</div>" + 
-                            "<div class='profile_content__trainer-createAtFormatted'>" + 
-                                "<span class='label'>Created: </span>" + 
-                                "<span>"+formattedProfile.trainer.createAtFormatted+"</span>" + 
-                            "</div>" + 
-                            "<div class='profile_content__trainer-lastUpdatedFormatted'>" + 
-                                "<span class='label'>Updated: </span>" + 
-                                "<span>"+formattedProfile.trainer.lastUpdatedFormatted+"</span>" + 
-                            "</div>" + 
-                            "<div class='profile_content__trainer-rankLevel'>" + 
-                                "<span class='label'>Rank: </span>" + 
-                                "<span>"+formattedProfile.trainer.rankLevel+"</span>" + 
-                            "</div>" + 
-                            "<div class='profile_content__trainer-level'>" + 
-                                "<span>"+formattedProfile.trainer.level+"</span>" + 
-                            "</div>" + 
-                            "<div class='profile_content__trainer-xp'>" + 
-                                "<span>"+formattedProfile.trainer.xp+"</span>" + 
-                            "</div>" + 
                             "<div class='profile_content__trainer-team'>" + 
                                 "<div class='div-bgi-parent teamIcon'>" + 
                                     "<div class='div-bgi div-bgi-1_1 "+formattedProfile.trainer.teamIcon+"'>"+"</div>" + 
                                 "</div>" + 
                                 "<span>"+formattedProfile.trainer.teamName+"</span>" + 
                             "</div>" + 
-                            "<div class='profile_content__trainer-stardust'>" + 
-                                "<div class='div-bgi-parent stardustIcon'>" + 
-                                    "<div class='div-bgi div-bgi-1_1 stardust_img'>"+"</div>" + 
+                            "<div class='profile_content__trainer-id'>" + 
+                                "<span>"+formattedProfile.trainer.id+"</span>" + 
+                            "</div>" + 
+                            // "<div class='profile_content__trainer-createAtFormatted'>" + 
+                            //     "<span class='label'>Created: </span>" + 
+                            //     "<span>"+formattedProfile.trainer.createAtFormatted+"</span>" + 
+                            // "</div>" + 
+                            // "<div class='profile_content__trainer-lastUpdatedFormatted'>" + 
+                            //     "<span class='label'>Updated: </span>" + 
+                            //     "<span>"+formattedProfile.trainer.lastUpdatedFormatted+"</span>" + 
+                            // "</div>" + 
+                            "<div class='profile_content__trainer-profile'>" + 
+                                "<div class='profile_content__trainer-level'>" + 
+                                    "<span class='label'>LV: </span>" + 
+                                    "<span>"+formattedProfile.trainer.level+"</span>" + 
                                 "</div>" + 
-                                "<span>"+formattedProfile.trainer.stardust+"</span>" + 
+                                "<div class='profile_content__trainer-xp'>" + 
+                                    "<span>"+formattedProfile.trainer.xp+"</span>" + 
+                                "</div>" + 
+                                "<div class='profile_content__trainer-stardust'>" + 
+                                    "<div class='div-bgi-parent stardustIcon'>" + 
+                                        "<div class='div-bgi div-bgi-1_1 stardust_img'>"+"</div>" + 
+                                    "</div>" + 
+                                    "<span>"+formattedProfile.trainer.stardust+"</span>" + 
+                                "</div>" + 
                             "</div>" + 
                         "</div>" + 
                         "<div class='profile_content__pokemon'>" + 

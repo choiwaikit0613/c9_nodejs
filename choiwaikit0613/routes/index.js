@@ -26,12 +26,15 @@ router.get('/', function(req, res, next) {
 
 router.get('/pokeadvisor/:group?', function(req, res, next){
     res.locals.project = 'pokeadvisor';
+    if(req.params.group == 'abc11hk'){
+        res.locals.admin = 'abc11hk';
+    }
     res.render('pokeadvisor/default.jade');
 });
 
 // API for getting group data
 router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
-    var profileList_family_listname = 'family';
+    var profileList_family_listname = 'kamtin';
     var profileList_family_listdata = [
         {
             'id': 'choiwaikit0613',
@@ -52,7 +55,7 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
         
     ];
     
-    var profileList_tkd_listname = 'tkd';
+    var profileList_tkd_listname = 'tkdyl';
     var profileList_tkd_listdata = [
         {
             'id': 'choiwaikit0613',
@@ -114,7 +117,30 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
             'id': 'applelok113',
             'name': 'Apple Ng'
         },
-        
+    ];
+    
+    var profileList_ascnsa_listname = 'ascnsa';
+    var profileList_ascnsa_listdata = [
+        {
+            'id': 'choiwaikit0613',
+            'name': 'Kit'
+        },
+        {
+            'id': '404Benny',
+            'name': 'Benny'
+        },
+        {
+            'id': 'Bubemonster',
+            'name': 'Winky Hui'
+        },
+        {
+            'id': 'RHui',
+            'name': 'Ricky Hui'
+        },
+        {
+            'id': 'Sindy1015',
+            'name': 'Sindy'
+        },
     ];
     
     var group = req.params.group;
@@ -123,20 +149,27 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
     addProfileList(profileList_tkd_listname, profileList_tkd_listdata);
     addProfileList(profileList_bwys_listname, profileList_bwys_listdata);
     addProfileList(profileList_cityucs_listname, profileList_cityucs_listdata);
+    addProfileList(profileList_ascnsa_listname, profileList_ascnsa_listdata);
     
     function addProfileList(listName, listData){
         var profileList = listData;
         profileList[ 'listname' ] = listName;
         profileLists[ listName ] = profileList;
     }
+    
     var result = {};
     if(group){
-        var profileList = {};
-        var profileListTemp = profileLists[group];
-        profileListTemp[ 'listname' ] = group;
-        profileList[ group ] = profileListTemp;
-        
-        result = profileList;
+        if(group == 'abc11hk'){
+            result = profileLists;
+        }
+        else{
+            var profileList = {};
+            var profileListTemp = profileLists[group];
+            profileListTemp[ 'listname' ] = group;
+            profileList[ group ] = profileListTemp;
+            
+            result = profileList;
+        }
     }
     else{
         // disable to protect player list

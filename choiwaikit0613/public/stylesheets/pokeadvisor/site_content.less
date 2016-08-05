@@ -10,21 +10,36 @@ body{
                         padding: 10px;
                         margin: 10px;
                         border: 5px solid #C3C3C3;
+                        // position: relative;
                         .profile_title{
                             padding-top: 5px;
                             padding-bottom: 5px;
+                            padding-left: 10px;
+                            padding-right: 10px;
+                            display: block;
+                            // widht: 100%;
+                            position: relative;
                             .profile_title__name{}
                             .profile_title__id{}
+                            .profile_content__trainer-rankLevel{
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                padding: 5px;
+                            }
                         }
                         .profile_content{
                             padding-top: 10px;
                             padding-bottom: 10px;
+                            padding-left: 10px;
+                            padding-right: 10px;
                             border: 3px solid #EEE;
                             > div{
                                 display: block;
-                                width: 100%;
+                                // width: 100%;
                                 > div{
                                     display: inline-block;
+                                    padding: 5px 10px;
                                     span{
                                     }
                                 }
@@ -32,6 +47,13 @@ body{
                             
                             .profile_content__trainer{
                                 > div {
+                                }
+                                .profile_content__trainer-team{
+                                    width: 80px;
+                                    text-align: center;
+                                    .teamIcon{
+                                        width: 50px;
+                                    }
                                 }
                                 .profile_content__trainer-id{
                                     display: none;
@@ -42,22 +64,23 @@ body{
                                 .profile_content__trainer-lastUpdatedFormatted{
                                     display: none;
                                 }
-                                .profile_content__trainer-rankLevel{}
-                                .profile_content__trainer-level{}
-                                .profile_content__trainer-xp{}
-                                .profile_content__trainer-team{
-                                    .teamIcon{
-                                        width: 50px;
+                                .profile_content__trainer-profile{
+                                    width: 100px;
+                                    > div {
+                                        display: block;
+                                        text-align: center;
                                     }
-                                }
-                                .profile_content__trainer-stardust{
-                                    .stardustIcon,
-                                    span{
-                                        display: inline-block;
-                                        vertical-align: middle;
-                                    }
-                                    .stardustIcon{
-                                        width: 30px;
+                                    .profile_content__trainer-level{}
+                                    .profile_content__trainer-xp{}
+                                    .profile_content__trainer-stardust{
+                                        .stardustIcon,
+                                        span{
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                        }
+                                        .stardustIcon{
+                                            width: 30px;
+                                        }
                                     }
                                 }
                             }
@@ -76,12 +99,20 @@ body{
                                 .profile_content__pokemon-captureRate{}
                             }
                             .profile_content__gym{
-                                .profile_content__gym-cooldown{}
+                                > div {
+                                    flaot: left;
+                                }
+                                .profile_content__gym-cooldown{
+                                    display: none;
+                                }
                                 .profile_content__gym-battleWon{}
                                 .profile_content__gym-trainingWin{}
                                 .profile_content__gym-prestigeEarned{}
                             }
                             .profile_content__other{
+                                > div {
+                                    flaot: left;
+                                }
                                 .profile_content__other-eggHatched{}
                                 .profile_content__other-traveledKm{}
                                 .profile_content__other-pokestopLooted{}
