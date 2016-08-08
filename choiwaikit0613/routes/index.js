@@ -3,6 +3,8 @@ var router = express.Router();
 var $ = require("jquery");
 var request = require("request");
 var _ = require("underscore");
+var moment = require("moment");
+var debug = require('debug')('choiwaikit0613:api');
 
 //////////////////////////////////////////////////
 // Index
@@ -52,7 +54,10 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
             'id': 'chu0v0chu',
             'name': 'Julie'
         },
-        
+        {
+            'id': 'Pokemonlofs',
+            'name': 'Lofs'
+        },
     ];
     
     var profileList_tkd_listname = 'tkdyl';
@@ -163,6 +168,7 @@ router.use('/api/pokeadvisor/group/:group?/', function(req, res, next){
     addProfileList(profileList_cityucs_listname, profileList_cityucs_listdata);
     addProfileList(profileList_ascnsa_listname, profileList_ascnsa_listdata);
     addProfileList(profileList_cp_listname, profileList_cp_listdata);
+    debug('Checking group: ' + req.params.group + ' at ' + moment().utcOffset(8).format('YYYY/MM/DD HH:mm:ss') );
     
     function addProfileList(listName, listData){
         var profileList = listData;
